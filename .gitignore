@@ -249,3 +249,4 @@ test/gaudi_opts/testConverterConstants.py
 
 # added by mattiasoldani
 build/
+*.sys.v#*
