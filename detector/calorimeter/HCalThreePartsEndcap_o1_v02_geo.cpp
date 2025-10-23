@@ -193,21 +193,21 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     }
     // Add structural support made of steel inside of HCal
     DetElement facePlate1(caloDetElem, "FacePlate_" + std::to_string(1 * sign), 0);
-    dd4hep::Tube facePlateShape1(dimensions.rmin1(), sensitiveBarrel1Rmin, dzDetectorNet1 + space);
+    dd4hep::Tube facePlateShape1(dimensions.rmin1(), dimensions.rmin1() + 2 * dRhoFacePlate, dzDetectorNet1 + space);
     Volume facePlateVol1("facePlateVol1", facePlateShape1, lcdd.material(xFacePlate.materialStr()));
     facePlateVol1.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace1(0, 0, sign * extBarrelOffset1);
 
     // Faceplate for 2nd part of extended Barrel
     DetElement facePlate2(caloDetElem, "FacePlate_" + std::to_string(2 * sign), 0);
-    dd4hep::Tube facePlateShape2(dimensions.rmin2(), sensitiveBarrel2Rmin, dzDetectorNet2 + space);
+    dd4hep::Tube facePlateShape2(dimensions.rmin2(), dimensions.rmin2() + 2 * dRhoFacePlate, dzDetectorNet2 + space);
     Volume facePlateVol2("facePlateVol2", facePlateShape2, lcdd.material(xFacePlate.materialStr()));
     facePlateVol2.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace2(0, 0, sign * extBarrelOffset2);
 
     // Faceplate for 3rd part of extended Barrel
     DetElement facePlate3(caloDetElem, "FacePlate_" + std::to_string(3 * sign), 0);
-    dd4hep::Tube facePlateShape3(dimensions.rmin(), sensitiveBarrel3Rmin, dzDetectorNet3 + space);
+    dd4hep::Tube facePlateShape3(dimensions.rmin(), dimensions.rmin() + 2 * dRhoFacePlate, dzDetectorNet3 + space);
     Volume facePlateVol3("facePlateVol3", facePlateShape3, lcdd.material(xFacePlate.materialStr()));
     facePlateVol3.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace3(0, 0, sign * extBarrelOffset3);
@@ -227,7 +227,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     Volume endPlateVol3("endPlateVol3", endPlateShape3, lcdd.material(xEndPlate.materialStr()));
     endPlateVol3.setVisAttributes(lcdd, xEndPlate.visStr());
 
-    // Endplates placed for the extended Barrels in front and in the back to the central Barrel
     DetElement endPlatePos(caloDetElem, "endPlate_" + std::to_string(1 * sign), 0);
     dd4hep::Position posOffset(0, 0, sign * (extBarrelOffset3 + (dzDetector3 - dZEndPlate)));
     PlacedVolume placedEndPlatePos = envelopeVolume.placeVolume(endPlateVol3, posOffset);
