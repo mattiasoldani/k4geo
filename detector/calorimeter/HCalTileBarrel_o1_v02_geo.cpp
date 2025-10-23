@@ -38,7 +38,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "steel support thickness (cm): %.2f", dSteelSupport);
 
-  double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness() + space;
+  double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness();
 
   // Hard-coded assumption that we have two different sequences for the modules
   std::vector<xml_comp_t> sequences = {xmlDet.child(_Unicode(sequence_a)), xmlDet.child(_Unicode(sequence_b))};
@@ -95,10 +95,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
                    "constructing: %d sequences in Z, %d radial layers, in total %d tiles", numSequencesZ, numLayersR,
                    numLayersR * numSequencesZ);
 
-  double rminSupport = sensitiveBarrelRmin + moduleDepth;
-  double rmaxSupport = sensitiveBarrelRmin + moduleDepth + dSteelSupport;
-
   double sensitiveBarrelRmax = sensitiveBarrelRmin + moduleDepth;
+  
+  double rminSupport = sensitiveBarrelRmax;
+  double rmaxSupport = sensitiveBarrelRmax + dSteelSupport;
 
   ////////////////////// detector building //////////////////////
 
