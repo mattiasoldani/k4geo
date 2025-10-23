@@ -119,7 +119,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   envelopeVolume.setVisAttributes(lcdd, xDimensions.visStr());
 
   // Add structural support made of steel inside of HCal
-  dd4hep::Tube facePlateShape(xDimensions.rmin(), sensitiveBarrelRmin, (dzDetector - dZEndPlate - space));
+  dd4hep::Tube facePlateShape(xDimensions.rmin(), xDimensions.rmin() + xFacePlate.thickness(), (dzDetector - dZEndPlate - space));
   Volume facePlateVol("HCalFacePlateVol", facePlateShape, lcdd.material(xFacePlate.materialStr()));
   facePlateVol.setVisAttributes(lcdd, xFacePlate.visStr());
   PlacedVolume placedFacePlate = envelopeVolume.placeVolume(facePlateVol);
