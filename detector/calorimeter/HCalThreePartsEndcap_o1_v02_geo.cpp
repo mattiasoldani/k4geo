@@ -164,6 +164,18 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
   dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "dz third part EC: %.2f", dzDetector3 * 2);
 
+  double sensitiveBarrel1Rmax = sensitiveBarrel1Rmin + moduleDepth1;
+  double sensitiveBarrel2Rmax = sensitiveBarrel2Rmin + moduleDepth2;
+  double sensitiveBarrel3Rmax = sensitiveBarrel3Rmin + moduleDepth3;
+  
+  double rminSupport1 = sensitiveBarrel1Rmax;
+  double rminSupport2 = sensitiveBarrel2Rmax;
+  double rminSupport3 = sensitiveBarrel3Rmax;
+
+  double rmaxSupport1 = sensitiveBarrel1Rmax + dSteelSupport;
+  double rmaxSupport2 = sensitiveBarrel2Rmax + dSteelSupport;
+  double rmaxSupport3 = sensitiveBarrel3Rmax + dSteelSupport;
+
   for (int iSign = -1; iSign < 2; iSign += 2) {
     int sign;
     if (iSign < 0) {
@@ -206,10 +218,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     facePlate3.setPlacement(placedFacePlate3);
 
     // Add structural support made of steel at both ends of extHCal
-    dd4hep::Tube endPlateShape1(dimensions.rmin1(), (dimensions.rmax1() - dSteelSupport), dZEndPlate);
+    dd4hep::Tube endPlateShape1(dimensions.rmin1(), rmaxSupport1, dZEndPlate);
     Volume endPlateVol1("endPlateVol1", endPlateShape1, lcdd.material(xEndPlate.materialStr()));
     endPlateVol1.setVisAttributes(lcdd, xEndPlate.visStr());
-    dd4hep::Tube endPlateShape3(dimensions.rmin(), (dimensions.rmax() - dSteelSupport), dZEndPlate);
+    dd4hep::Tube endPlateShape3(dimensions.rmin(), rmaxSupport3, dZEndPlate);
     Volume endPlateVol3("endPlateVol3", endPlateShape3, lcdd.material(xEndPlate.materialStr()));
     endPlateVol3.setVisAttributes(lcdd, xEndPlate.visStr());
 

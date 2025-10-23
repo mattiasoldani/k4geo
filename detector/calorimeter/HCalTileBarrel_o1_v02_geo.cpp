@@ -127,7 +127,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   facePlate_det.setPlacement(placedFacePlate);
 
   // Add structural support made of steel at both ends of HCal
-  dd4hep::Tube endPlateShape(xDimensions.rmin(), (xDimensions.rmax() - dSteelSupport), dZEndPlate / 2);
+  dd4hep::Tube endPlateShape(xDimensions.rmin(), rmaxSupport, dZEndPlate / 2);
   Volume endPlateVol("HCalEndPlateVol", endPlateShape, lcdd.material(xEndPlate.materialStr()));
   endPlateVol.setVisAttributes(lcdd, xEndPlate.visStr());
 
