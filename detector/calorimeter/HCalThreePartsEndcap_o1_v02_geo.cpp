@@ -193,21 +193,21 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     }
     // Add structural support made of steel inside of HCal
     DetElement facePlate1(caloDetElem, "FacePlate_" + std::to_string(1 * sign), 0);
-    dd4hep::Tube facePlateShape1(dimensions.rmin1(), dimensions.rmin1() + 2 * dRhoFacePlate, dzDetectorNet1 + space);
+    dd4hep::Tube facePlateShape1(dimensions.rmin1(), dimensions.rmin1() + 2 * dRhoFacePlate, dzDetector1 - 2*dZEndPlate);
     Volume facePlateVol1("facePlateVol1", facePlateShape1, lcdd.material(xFacePlate.materialStr()));
     facePlateVol1.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace1(0, 0, sign * extBarrelOffset1);
 
     // Faceplate for 2nd part of extended Barrel
     DetElement facePlate2(caloDetElem, "FacePlate_" + std::to_string(2 * sign), 0);
-    dd4hep::Tube facePlateShape2(dimensions.rmin2(), dimensions.rmin2() + 2 * dRhoFacePlate, dzDetectorNet2 + space);
+    dd4hep::Tube facePlateShape2(dimensions.rmin2(), dimensions.rmin2() + 2 * dRhoFacePlate, dzDetector2 - 2*dZEndPlate);
     Volume facePlateVol2("facePlateVol2", facePlateShape2, lcdd.material(xFacePlate.materialStr()));
     facePlateVol2.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace2(0, 0, sign * extBarrelOffset2);
 
     // Faceplate for 3rd part of extended Barrel
     DetElement facePlate3(caloDetElem, "FacePlate_" + std::to_string(3 * sign), 0);
-    dd4hep::Tube facePlateShape3(dimensions.rmin(), dimensions.rmin() + 2 * dRhoFacePlate, dzDetectorNet3 + space);
+    dd4hep::Tube facePlateShape3(dimensions.rmin(), dimensions.rmin() + 2 * dRhoFacePlate, dzDetector3 - 2*dZEndPlate);
     Volume facePlateVol3("facePlateVol3", facePlateShape3, lcdd.material(xFacePlate.materialStr()));
     facePlateVol3.setVisAttributes(lcdd, xFacePlate.visStr());
     dd4hep::Position offsetFace3(0, 0, sign * extBarrelOffset3);
@@ -237,6 +237,70 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol1, negOffset);
     endPlateNeg.setPlacement(placedEndPlateNeg);
 
+    // Also ad end plates (same as the ones at the outer ends) in between the different parts...
+
+    // --> Between part 1 and 2, side of part 1
+    dd4hep::Tube endPlateShapeIn12(dimensions.rmin1(), rmaxSupport1, dZEndPlate);
+    Volume endPlateVolIn12("endPlateVolIn12", endPlateShapeIn12, lcdd.material(xEndPlate.materialStr()));
+    endPlateVolIn12.setVisAttributes(lcdd, xEndPlate.visStr());
+    DetElement inPlate12(caloDetElem, "inPlate12_" + std::to_string(1 * sign), 0);
+    dd4hep::Position offsetInPlate12(0, 0, sign * (extBarrelOffset1 + (dzDetector1 - dZEndPlate)));
+    PlacedVolume placedInPlate12 = envelopeVolume.placeVolume(endPlateVolIn12, offsetInPlate12);
+    inPlate12.setPlacement(placedInPlate12);
+
+    // --> Between part 1 and 2, side of part 2
+    dd4hep::Tube endPlateShapeIn21(dimensions.rmin2(), rmaxSupport2, dZEndPlate);
+    Volume endPlateVolIn21("endPlateVolIn21", endPlateShapeIn21, lcdd.material(xEndPlate.materialStr()));
+    endPlateVolIn21.setVisAttributes(lcdd, xEndPlate.visStr());
+    DetElement inPlate21(caloDetElem, "inPlate21_" + std::to_string(1 * sign), 0);
+    dd4hep::Position offsetInPlate21(0, 0, sign * (extBarrelOffset2 - (dzDetector2 - dZEndPlate)));
+    PlacedVolume placedInPlate21 = envelopeVolume.placeVolume(endPlateVolIn21, offsetInPlate21);
+    inPlate21.setPlacement(placedInPlate21);
+
+    // --> Between part 2 and 3, side of part 2
+    dd4hep::Tube endPlateShapeIn23(dimensions.rmin2(), rmaxSupport2, dZEndPlate);
+    Volume endPlateVolIn23("endPlateVolIn23", endPlateShapeIn23, lcdd.material(xEndPlate.materialStr()));
+    endPlateVolIn23.setVisAttributes(lcdd, xEndPlate.visStr());
+    DetElement inPlate23(caloDetElem, "inPlate23_" + std::to_string(1 * sign), 0);
+    dd4hep::Position offsetInPlate23(0, 0, sign * (extBarrelOffset2 + (dzDetector2 - dZEndPlate)));
+    PlacedVolume placedInPlate23 = envelopeVolume.placeVolume(endPlateVolIn23, offsetInPlate23);
+    inPlate23.setPlacement(placedInPlate23);
+
+    // --> Between part 2 and 3, side of part 3
+    dd4hep::Tube endPlateShapeIn32(dimensions.rmin(), rmaxSupport3, dZEndPlate);
+    Volume endPlateVolIn32("endPlateVolIn32", endPlateShapeIn32, lcdd.material(xEndPlate.materialStr()));
+    endPlateVolIn32.setVisAttributes(lcdd, xEndPlate.visStr());
+    DetElement inPlate32(caloDetElem, "inPlate32_" + std::to_string(1 * sign), 0);
+    dd4hep::Position offsetInPlate32(0, 0, sign * (extBarrelOffset3 - (dzDetector3 - dZEndPlate)));
+    PlacedVolume placedInPlate32 = envelopeVolume.placeVolume(endPlateVolIn32, offsetInPlate32);
+    inPlate32.setPlacement(placedInPlate32);
+
+    // Add outer support girders
+    dd4hep::Tube supportShape1(rminSupport1, rmaxSupport1, (dzDetector1 - 2*dZEndPlate));
+    Volume steelSupportVolume1("HCalSteelSupportVol1", supportShape1, lcdd.material(xSteelSupport.materialStr()));
+    steelSupportVolume1.setVisAttributes(lcdd.invisible());
+    dd4hep::Position offsetSupportShape1(0, 0, sign * extBarrelOffset1);
+    PlacedVolume placedSupport1 = envelopeVolume.placeVolume(steelSupportVolume1);
+    DetElement support1(caloDetElem, "HCalSteelSupport1", 0);
+    support1.setPlacement(placedSupport1);
+
+    dd4hep::Tube supportShape2(rminSupport2, rmaxSupport2, (dzDetector2 - 2*dZEndPlate));
+    Volume steelSupportVolume2("HCalSteelSupportVol2", supportShape2, lcdd.material(xSteelSupport.materialStr()));
+    steelSupportVolume2.setVisAttributes(lcdd.invisible());
+    dd4hep::Position offsetSupportShape2(0, 0, sign * extBarrelOffset2);
+    PlacedVolume placedSupport2 = envelopeVolume.placeVolume(steelSupportVolume2);
+    DetElement support2(caloDetElem, "HCalSteelSupport2", 0);
+    support2.setPlacement(placedSupport2);
+
+    dd4hep::Tube supportShape3(rminSupport3, rmaxSupport3, (dzDetector3 - 2*dZEndPlate));
+    Volume steelSupportVolume3("HCalSteelSupportVol3", supportShape3, lcdd.material(xSteelSupport.materialStr()));
+    steelSupportVolume3.setVisAttributes(lcdd.invisible());
+    dd4hep::Position offsetSupportShape3(0, 0, sign * extBarrelOffset3);
+    PlacedVolume placedSupport3 = envelopeVolume.placeVolume(steelSupportVolume3);
+    DetElement support3(caloDetElem, "HCalSteelSupport3", 0);
+    support3.setPlacement(placedSupport3);
+
+    // Prepare vector of layers
     std::vector<dd4hep::PlacedVolume> layers;
     layers.reserve(layerDepths1.size() + layerDepths2.size() + layerDepths3.size());
     std::vector<std::vector<dd4hep::PlacedVolume>> seqInLayers;

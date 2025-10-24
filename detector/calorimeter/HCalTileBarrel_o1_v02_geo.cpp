@@ -102,6 +102,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
   ////////////////////// detector building //////////////////////
 
+  // Prepare vector of layers
   std::vector<dd4hep::PlacedVolume> layers;
   layers.reserve(layerDepths.size());
   std::vector<std::vector<dd4hep::PlacedVolume>> seqInLayers;
@@ -119,7 +120,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   envelopeVolume.setVisAttributes(lcdd, xDimensions.visStr());
 
   // Add structural support made of steel inside of HCal
-  dd4hep::Tube facePlateShape(xDimensions.rmin(), xDimensions.rmin() + xFacePlate.thickness(), (dzDetector - dZEndPlate - space));
+  dd4hep::Tube facePlateShape(xDimensions.rmin(), xDimensions.rmin() + xFacePlate.thickness(), (dzDetector - dZEndPlate));
   Volume facePlateVol("HCalFacePlateVol", facePlateShape, lcdd.material(xFacePlate.materialStr()));
   facePlateVol.setVisAttributes(lcdd, xFacePlate.visStr());
   PlacedVolume placedFacePlate = envelopeVolume.placeVolume(facePlateVol);
@@ -141,7 +142,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol, negOffset);
   endPlateNeg.setPlacement(placedEndPlateNeg);
 
-  dd4hep::Tube supportShape(rminSupport, rmaxSupport, (dzDetector - dZEndPlate - space));
+  // Add outer support girder
+  dd4hep::Tube supportShape(rminSupport, rmaxSupport, (dzDetector - dZEndPlate));
   Volume steelSupportVolume("HCalSteelSupportVol", supportShape, lcdd.material(xSteelSupport.materialStr()));
   steelSupportVolume.setVisAttributes(lcdd.invisible());
   PlacedVolume placedSupport = envelopeVolume.placeVolume(steelSupportVolume);
