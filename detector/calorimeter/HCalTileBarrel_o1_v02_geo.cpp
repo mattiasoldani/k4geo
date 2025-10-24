@@ -35,10 +35,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   double space = xSpace.thickness();
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
+  double dRhoFacePlate = xFacePlate.thickness();
 
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "steel support thickness (cm): %.2f", dSteelSupport);
 
-  double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness();
+  double sensitiveBarrelRmin = xDimensions.rmin() + dRhoFacePlate;
 
   // Hard-coded assumption that we have two different sequences for the modules
   std::vector<xml_comp_t> sequences = {xmlDet.child(_Unicode(sequence_a)), xmlDet.child(_Unicode(sequence_b))};
@@ -81,7 +82,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
   }
   // Calculate correction along z based on the module size (can only have natural number of modules)
-  double dzDetector = (numSequencesZ * dzSequence) / 2 + dZEndPlate + space;
+  double dzDetectorNet = (numSequencesZ * dzSequence) / 2;
+  double dzDetector = dzDetectorNet + dZEndPlate + space;
 
   dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "dzDetector (cm): %.2f", dzDetector);
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "correction of dz in cm (negative = size reduced): %.2f",
@@ -120,7 +122,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   envelopeVolume.setVisAttributes(lcdd, xDimensions.visStr());
 
   // Add structural support made of steel inside of HCal
-  dd4hep::Tube facePlateShape(xDimensions.rmin(), xDimensions.rmin() + xFacePlate.thickness(), (dzDetector - dZEndPlate));
+  dd4hep::Tube facePlateShape(xDimensions.rmin(), xDimensions.rmin() + dRhoFacePlate, (dzDetector - dZEndPlate));
   Volume facePlateVol("HCalFacePlateVol", facePlateShape, lcdd.material(xFacePlate.materialStr()));
   facePlateVol.setVisAttributes(lcdd, xFacePlate.visStr());
   PlacedVolume placedFacePlate = envelopeVolume.placeVolume(facePlateVol);
@@ -171,7 +173,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
     Volume tileSequenceVolume("HCalTileSequenceVol", tileSequenceShape, lcdd.air());
 
-    dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector - dZEndPlate - space);
+    dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetectorNet);
     Volume layerVolume("HCalLayerVol", layerShape, lcdd.air());
 
     layerVolume.setVisAttributes(lcdd.invisible());
@@ -205,7 +207,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     std::vector<dd4hep::PlacedVolume> sq_vector;
 
     for (uint numSeq = 0; numSeq < numSequencesZ; numSeq++) {
-      double zOffset = -dzDetector + numSeq * dzSequence + dzSequence / 2 + dZEndPlate + space;
+      double zOffset = -dzDetectorNet + numSeq * dzSequence + dzSequence / 2;
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
       dd4hep::PlacedVolume placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
       placedTileSequenceVolume.addPhysVolID("row", numSeq);

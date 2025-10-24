@@ -40,7 +40,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   sensDet.setType(sensDetType.typeStr());
 
   xml_comp_t xEndPlate = xmlElement.child(_Unicode(end_plate));
-  double dZEndPlate = xEndPlate.thickness() / 2.;
+  double dZEndPlate = xEndPlate.thickness();
   xml_comp_t xFacePlate = xmlElement.child(_Unicode(face_plate));
   double dRhoFacePlate = xFacePlate.thickness() / 2.;
   xml_comp_t xSpace = xmlElement.child(_Unicode(plate_space)); // to avoid overlaps
@@ -80,10 +80,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "sequence thickness %.2f", dzSequence);
 
   // calculate the number of modules fitting in  Z
-  unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - 2 * dZEndPlate - space) / dzSequence);
-  unsigned int numSequencesZ2 = static_cast<unsigned>((2 * dimensions.dz() - 2 * dZEndPlate - space) / dzSequence);
+  unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - dZEndPlate - space) / dzSequence);
+  unsigned int numSequencesZ2 = static_cast<unsigned>((2 * dimensions.dz() - dZEndPlate - space) / dzSequence);
   unsigned int numSequencesZ3 =
-      static_cast<unsigned>((2 * dimensions.z_length() - 2 * dZEndPlate - space) / dzSequence);
+      static_cast<unsigned>((2 * dimensions.z_length() - dZEndPlate - space) / dzSequence);
 
   unsigned int numLayersR1 = 0;
   unsigned int numLayersR2 = 0;
@@ -153,9 +153,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   double dzDetectorNet2 = (numSequencesZ2 * dzSequence) / 2
   double dzDetectorNet3 = (numSequencesZ3 * dzSequence) / 2;
 
-  double dzDetector1 = dzDetectorNet1 + 2 * dZEndPlate + space;
-  double dzDetector2 = dzDetectorNet2 + 2 * dZEndPlate + space;
-  double dzDetector3 = dzDetectorNet3 + 2 * dZEndPlate + space;
+  double dzDetector1 = dzDetectorNet1 + dZEndPlate + space;
+  double dzDetector2 = dzDetectorNet2 + dZEndPlate + space;
+  double dzDetector3 = dzDetectorNet3 + dZEndPlate + space;
 
   dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02",
                    "correction of dz (negative = size reduced) first part EC: %.2f",
@@ -328,7 +328,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                          idxLayer, rminLayer, rmaxLayer);
       }
 
-      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1);
+      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetectorNet1);
       Volume layerVolume("HCalECLayerVol1", layerShape, lcdd.air());
 
       layerVolume.setVisAttributes(lcdd.invisible());
@@ -369,7 +369,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
       // second z loop (place sequences in layer)
       std::vector<dd4hep::PlacedVolume> seqs;
-      double zOffset = -dzDetector1 + 0.5 * dzSequence + 2 * dZEndPlate + space;
+      double zOffset = -dzDetectorNet1 + 0.5 * dzSequence;
 
       for (uint numSeq = 0; numSeq < numSequencesZ1; numSeq++) {
         dd4hep::Position tileSequencePosition(0, 0, zOffset);
@@ -402,7 +402,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                          idxLayer, rminLayer, rmaxLayer);
       }
 
-      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector2);
+      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetectorNet2);
       Volume layerVolume("HCalECLayerVol2", layerShape, lcdd.air());
 
       layerVolume.setVisAttributes(lcdd.invisible());
@@ -474,7 +474,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                          idxLayer, rminLayer, rmaxLayer);
       }
 
-      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector3);
+      dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetectorNet3);
       Volume layerVolume("HCalECLayerVol3", layerShape, lcdd.air());
 
       layerVolume.setVisAttributes(lcdd.invisible());
@@ -503,7 +503,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
       // second z loop (place sequences in layer)
       std::vector<dd4hep::PlacedVolume> seqs;
-      double zOffset = -dzDetector3 + 0.5 * dzSequence; // 2*dZEndPlate + space + (dzSequence * 0.5);
+      double zOffset = -dzDetector3 + 0.5 * dzSequence; // dZEndPlate + space + (dzSequence * 0.5);
 
       for (uint numSeq = 0; numSeq < numSequencesZ3; numSeq++) {
         dd4hep::Position tileSequencePosition(0, 0, zOffset);
