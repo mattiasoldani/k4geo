@@ -82,8 +82,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "sequence thickness %.2f", dzSequence);
 
   // calculate the number of modules fitting in  Z
-  unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - dZEndPlate - space) / dzSequence);
-  unsigned int numSequencesZ2 = static_cast<unsigned>((2 * dimensions.dz() - dZEndPlate - space) / dzSequence);
+  unsigned int numSequencesZ1 = static_cast<unsigned>(2*(dimensions.width() - dZEndPlate - space) / dzSequence);
+  unsigned int numSequencesZ2 = static_cast<unsigned>(2*(dimensions.dz() - dZEndPlate - space) / dzSequence);
   unsigned int numSequencesZ3 =
       static_cast<unsigned>((2 * dimensions.z_length() - dZEndPlate - space) / dzSequence);
 
@@ -152,7 +152,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetectorSens1 = (numSequencesZ1 * dzSequence) / 2; // net (i.e. only layers) detector width along z
-  double dzDetectorSens2 = (numSequencesZ2 * dzSequence) / 2
+  double dzDetectorSens2 = (numSequencesZ2 * dzSequence) / 2;
   double dzDetectorSens3 = (numSequencesZ3 * dzSequence) / 2;
   double dzDetector1 = dzDetectorSens1 + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector width along z
   double dzDetector2 = dzDetectorSens2 + dZEndPlate + space;
