@@ -4,7 +4,7 @@
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
   <info name="FCCee_HCalEndcap_TileCal"
     title="Extended Barrel Calorimeter"
-    author="C. Neubueser, J. Faltova, M. Mlynarikova, updated by A. Durglishvili in 2024"
+    author="C. Neubueser, J. Faltova, M. Mlynarikova, updated by A. Durglishvili in 2024, updated by M. Soldani in 2025"
     url="no"
     status="development"
     version="1.0">
