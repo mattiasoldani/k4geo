@@ -281,24 +281,24 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     Volume steelSupportVolume1("HCalSteelSupportVol1", supportShape1, lcdd.material(xSteelSupport.materialStr()));
     steelSupportVolume1.setVisAttributes(lcdd.invisible());
     dd4hep::Position offsetSupportShape1(0, 0, sign * extBarrelOffset1);
-    PlacedVolume placedSupport1 = envelopeVolume.placeVolume(steelSupportVolume1);
-    DetElement support1(caloDetElem, "HCalSteelSupport1", 0);
+    PlacedVolume placedSupport1 = envelopeVolume.placeVolume(steelSupportVolume1, offsetSupportShape1);
+    DetElement support1(caloDetElem, "HCalSteelSupport1_" + std::to_string(1 * sign), 0);
     support1.setPlacement(placedSupport1);
 
     dd4hep::Tube supportShape2(rminSupport2, rmaxSupport2, (dzDetector2 - 2*dZEndPlate));
     Volume steelSupportVolume2("HCalSteelSupportVol2", supportShape2, lcdd.material(xSteelSupport.materialStr()));
     steelSupportVolume2.setVisAttributes(lcdd.invisible());
     dd4hep::Position offsetSupportShape2(0, 0, sign * extBarrelOffset2);
-    PlacedVolume placedSupport2 = envelopeVolume.placeVolume(steelSupportVolume2);
-    DetElement support2(caloDetElem, "HCalSteelSupport2", 0);
+    PlacedVolume placedSupport2 = envelopeVolume.placeVolume(steelSupportVolume2, offsetSupportShape2);
+    DetElement support2(caloDetElem, "HCalSteelSupport2_" + std::to_string(1 * sign), 0);
     support2.setPlacement(placedSupport2);
 
     dd4hep::Tube supportShape3(rminSupport3, rmaxSupport3, (dzDetector3 - 2*dZEndPlate));
     Volume steelSupportVolume3("HCalSteelSupportVol3", supportShape3, lcdd.material(xSteelSupport.materialStr()));
     steelSupportVolume3.setVisAttributes(lcdd.invisible());
     dd4hep::Position offsetSupportShape3(0, 0, sign * extBarrelOffset3);
-    PlacedVolume placedSupport3 = envelopeVolume.placeVolume(steelSupportVolume3);
-    DetElement support3(caloDetElem, "HCalSteelSupport3", 0);
+    PlacedVolume placedSupport3 = envelopeVolume.placeVolume(steelSupportVolume3, offsetSupportShape3);
+    DetElement support3(caloDetElem, "HCalSteelSupport3_" + std::to_string(1 * sign), 0);
     support3.setPlacement(placedSupport3);
 
     // Prepare vector of layers
