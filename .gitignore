@@ -251,3 +251,4 @@ test/gaudi_opts/testConverterConstants.py
 build/
 *.sys.v#*
 FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03_HCal_standalone.xml
+recompile.sh
