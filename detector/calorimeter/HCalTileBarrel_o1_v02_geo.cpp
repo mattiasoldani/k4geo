@@ -133,15 +133,15 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   facePlate_det.setPlacement(placedFacePlate);
 
   // Add structural support made of steel at both ends of HCal
-  dd4hep::Tube endPlateShape(xDimensions.rmin(), rmaxSupport, dZEndPlate);
+  dd4hep::Tube endPlateShape(xDimensions.rmin(), rmaxSupport, dZEndPlate/2);
   Volume endPlateVol("HCalEndPlateVol", endPlateShape, lcdd.material(xEndPlate.materialStr()));
   endPlateVol.setVisAttributes(lcdd, xEndPlate.visStr());
   DetElement endPlatePos(caloDetElem, "HCalEndPlatePos", 0);
-  dd4hep::Position posOffset(0, 0, dzDetector - (dZEndPlate));
+  dd4hep::Position posOffset(0, 0, dzDetector - dZEndPlate/2);
   PlacedVolume placedEndPlatePos = envelopeVolume.placeVolume(endPlateVol, posOffset);
   endPlatePos.setPlacement(placedEndPlatePos);
   DetElement endPlateNeg(caloDetElem, "HCalEndPlateNeg", 1);
-  dd4hep::Position negOffset(0, 0, -dzDetector + (dZEndPlate));
+  dd4hep::Position negOffset(0, 0, -dzDetector + dZEndPlate/2);
   PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol, negOffset);
   endPlateNeg.setPlacement(placedEndPlateNeg);
 
