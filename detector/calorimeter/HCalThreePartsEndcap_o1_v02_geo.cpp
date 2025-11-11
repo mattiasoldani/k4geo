@@ -432,7 +432,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
       // second z loop (place sequences in layer)
       std::vector<dd4hep::PlacedVolume> seqs;
-      double zOffset = -dzDetector2 + 0.5 * dzSequence; //(dzSequence * 0.5);
+      double zOffset = -dzDetectorSens2 + 0.5 * dzSequence; //(dzSequence * 0.5);
 
       for (uint numSeq = 0; numSeq < numSequencesZ2; numSeq++) {
         dd4hep::Position tileSequencePosition(0, 0, zOffset);
@@ -504,7 +504,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
       // second z loop (place sequences in layer)
       std::vector<dd4hep::PlacedVolume> seqs;
-      double zOffset = -dzDetector3 + 0.5 * dzSequence; // dZEndPlate + space + (dzSequence * 0.5);
+      double zOffset = -dzDetectorSens3 + 0.5 * dzSequence; // dZEndPlate + space + (dzSequence * 0.5);
 
       for (uint numSeq = 0; numSeq < numSequencesZ3; numSeq++) {
         dd4hep::Position tileSequencePosition(0, 0, zOffset);
