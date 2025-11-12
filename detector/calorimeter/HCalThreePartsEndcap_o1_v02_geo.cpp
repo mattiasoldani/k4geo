@@ -151,10 +151,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                    numLayersR1 * numSequencesZ1 + numLayersR2 * numSequencesZ2 + numLayersR3 * numSequencesZ3);
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
-  double dzDetectorSens1 = (numSequencesZ1 * dzSequence) / 2; // net (i.e. only layers) detector width along z
+  double dzDetectorSens1 = (numSequencesZ1 * dzSequence) / 2; // net (i.e. only layers) detector half-width along z
   double dzDetectorSens2 = (numSequencesZ2 * dzSequence) / 2;
   double dzDetectorSens3 = (numSequencesZ3 * dzSequence) / 2;
-  double dzDetector1 = dzDetectorSens1 + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector width along z
+  double dzDetector1 = dzDetectorSens1 + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
   double dzDetector2 = dzDetectorSens2 + dZEndPlate + space;
   double dzDetector3 = dzDetectorSens3 + dZEndPlate + space;
 

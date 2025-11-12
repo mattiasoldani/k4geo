@@ -84,8 +84,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
   }
   // Calculate correction along z based on the module size (can only have natural number of modules)
-  double dzDetectorSens = (numSequencesZ * dzSequence) / 2; // net (i.e. only layers) detector width along z
-  double dzDetector = dzDetectorSens + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector width along z
+  double dzDetectorSens = (numSequencesZ * dzSequence) / 2; // net (i.e. only layers) detector half-width along z
+  double dzDetector = dzDetectorSens + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
 
   dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "dzDetector (cm): %.2f", dzDetector);
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "correction of dz in cm (negative = size reduced): %.2f",
