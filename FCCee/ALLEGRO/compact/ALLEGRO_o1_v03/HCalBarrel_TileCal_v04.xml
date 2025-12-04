@@ -112,7 +112,7 @@
   </readouts>
 
   <detectors>
-    <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v04" readout="HCalBarrelReadout">
+    <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v02" readout="HCalBarrelReadout">
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
       <dimensions rmin="BarHCal_rmin" rmax="BarHCal_rmax" dz="BarHCal_dz" vis="hcal_envelope" />
       <sensitive type="calorimeter"/>
@@ -147,6 +147,11 @@
           phiBins="BarHCal_n_phi_modules"
           x="BarHCAL_module_spacing_phi"
         />
+<<<<<<< HEAD
+=======
+        <!-- Master plate -->
+        <module_component name="master" thickness="BarHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_master_vis" />
+>>>>>>> 750b5d57 (ALLEGRO HCAL debugged mechanical structure and code polishing (Oct 25))
         <!-- Spacer plate -->
         <module_component name="spacer" thickness="BarHCal_spacer_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_vis" />
         <!-- Master plate -->
@@ -157,8 +162,11 @@
         <module_component name="scintillator" thickness="BarHCal_scintillator_thickness" y_offset="0" material="Polystyrene" sensitive="true" vis="hcal_polystyrene_vis" />
         <!-- Air -->
         <module_component name="airspacer" thickness="BarHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="hcal_air_vis" />
+<<<<<<< HEAD
         <!-- Master plate -->
         <module_component name="master" thickness="BarHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_master_vis" />
+=======
+>>>>>>> 750b5d57 (ALLEGRO HCAL debugged mechanical structure and code polishing (Oct 25))
       </sequence_a>
       <sequence_b id="4" name="sequence_2" material="Air" vis="hcal_barrel_seq2_vis">
         <dimensions
@@ -166,6 +174,11 @@
           phiBins="BarHCal_n_phi_modules"
           x="BarHCAL_module_spacing_phi"
         />
+<<<<<<< HEAD
+=======
+        <!-- Master plate -->
+        <module_component name="master" thickness="BarHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_master_vis" />
+>>>>>>> 750b5d57 (ALLEGRO HCAL debugged mechanical structure and code polishing (Oct 25))
         <!-- Air -->
         <module_component name="airspacer" thickness="BarHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="hcal_air_vis" />
         <!-- Scintillator plate -->
@@ -176,11 +189,18 @@
         <module_component name="master" thickness="BarHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_master_vis" />
         <!-- Spacer plate -->
         <module_component name="spacer" thickness="BarHCal_spacer_plate_thickness" y_offset="0"  material="Fe" sensitive="false" vis="hcal_steel_vis" />
+<<<<<<< HEAD
         <!-- Master plate -->
         <module_component name="master" thickness="BarHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="hcal_steel_master_vis" />
+=======
+>>>>>>> 750b5d57 (ALLEGRO HCAL debugged mechanical structure and code polishing (Oct 25))
       </sequence_b>
 
     </detector>
   </detectors>
 
+<<<<<<< HEAD
 </lccdd>
+=======
+</lccdd>
+>>>>>>> 750b5d57 (ALLEGRO HCAL debugged mechanical structure and code polishing (Oct 25))
