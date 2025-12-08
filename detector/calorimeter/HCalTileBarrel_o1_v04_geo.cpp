@@ -84,7 +84,16 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
   }
   // Calculate correction along z based on the module size (can only have natural number of modules)
-  double dzDetectorSens = (numSequencesZ * dzSequence) / 2; // net (i.e. only layers) detector half-width along z
+  double masterPlateThk = 0.; 
+  for (xml_coll_t xCompColl(sequences[0], _Unicode(module_component)); xCompColl;
+        ++xCompColl) {
+    xml_comp_t xComp = xCompColl;
+    if ((masterPlateThk <= 0) && (xComp.nameStr() == "master")) {
+      masterPlateThk = xComp.thickness();  
+      break;
+    }
+  }
+  double dzDetectorSens = (numSequencesZ * dzSequence - masterPlateThk) / 2; // net (i.e. only layers) detector half-width along z
   double dzDetector = dzDetectorSens + dZEndPlate + space; // gross (i.e. layers + side mechanics) detector half-width along z
 
   dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v04", "dzDetector (cm): %.2f", dzDetector);
@@ -204,13 +213,47 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       tileZOffset += xComp.thickness();
     }
 
+    // special case for rightmost sequence, which must not feature the final master plate
+    double dzSequence_R = dzSequence - masterPlateThk;
+
+    dd4hep::Tube tileSequenceShape_R(rminLayer, rmaxLayer, 0.5*dzSequence_R);
+    Volume tileSequenceVolume_R("HCalTileSequenceVol_R", tileSequenceShape_R, lcdd.air());
+
+    tileZOffset = -0.5 * dzSequence_R;
+    // first Z loop (tiles that make up a sequence) - for the special case
+    for (xml_coll_t xCompColl(sequences[sequenceIdx], _Unicode(module_component)); xCompColl;
+         ++xCompColl, ++idxSubMod) {
+      xml_comp_t xComp = xCompColl;
+      dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
+
+      Volume tileVol("HCalTileVol_" + xComp.nameStr(), tileShape, lcdd.material(xComp.materialStr()));
+      tileVol.setVisAttributes(lcdd, xComp.visStr());
+
+      if ((xComp.nameStr() == "master") && (tileZOffset + xComp.thickness() > 0.5*dzSequence_R)) break; // i.e. cut sequence filling at the final master plate
+
+      dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
+      dd4hep::PlacedVolume placedTileVol = tileSequenceVolume_R.placeVolume(tileVol, tileOffset);
+
+      if (xComp.isSensitive()) {
+        tileVol.setSensitiveDetector(sensDet);
+        tilesPerLayer.push_back(placedTileVol);
+      }
+      tileZOffset += xComp.thickness();
+    }
+
     // second z loop (place sequences in layer)
     std::vector<dd4hep::PlacedVolume> sq_vector;
 
     for (uint numSeq = 0; numSeq < numSequencesZ; numSeq++) {
-      double zOffset = -dzDetectorSens + numSeq * dzSequence + dzSequence / 2;
+      double dzSequence_eff = (numSeq < numSequencesZ-1) ? dzSequence : dzSequence_R;
+      double zOffset = -dzDetectorSens + numSeq * dzSequence + dzSequence_eff/2;
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
-      dd4hep::PlacedVolume placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
+      dd4hep::PlacedVolume placedTileSequenceVolume;
+      if (numSeq < numSequencesZ-1) {
+        placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
+      }else{
+        placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume_R, tileSequencePosition);
+      }
       placedTileSequenceVolume.addPhysVolID("row", numSeq);
       sq_vector.push_back(placedTileSequenceVolume);
     }
