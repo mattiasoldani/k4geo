@@ -114,7 +114,7 @@
        nPads is the number of radial layers in the third part --> 
 
   <detectors>
-    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v02" readout="HCalEndcapReadout" >
+    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v04" readout="HCalEndcapReadout" >
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
       <!-- vis="endcapHcal_envelope"> -->
       <sensitive type="calorimeter"/>
